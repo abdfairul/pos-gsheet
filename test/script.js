@@ -9,7 +9,7 @@ class Order {
         this._payment = {
             amountPaid: 0,
             type: "",
-            changeTip: 0
+            change: 0
         };
     }
 
@@ -116,10 +116,10 @@ class Order {
         if (input.amountPaid != null) this.payment.amountPaid = parseFloat(input.amountPaid);
         if (input.type != null) this.payment.type = input.type;
         if (this.payment.amountPaid >= orderGrandTotal) {
-            this.payment.changeTip = this.payment.amountPaid - orderGrandTotal;
+            this.payment.change = this.payment.amountPaid - orderGrandTotal;
             Ui.closeButton(false);
         } else {
-            this.payment.changeTip = 0;
+            this.payment.change = 0;
             Ui.closeButton(true)
         }
 
@@ -130,7 +130,7 @@ class Order {
         this.payment = {
             amountPaid: 0,
             type: "",
-            changeTip: 0
+            change: 0
         };
 
         Ui.paymentSummary(this);
@@ -156,18 +156,10 @@ class Order {
 
     exportPayment(date) {
         const currentPayment = [[]];
-        const tipChange = Utilities.roundToTwo(this.payment.amountPaid - this.getSummary().grandtotal);
 
         currentPayment[0][0] = date;
         currentPayment[0][1] = this.invoiceNumber;
         currentPayment[0][2] = this.getSummary().grandtotal;
-        currentPayment[0][3] = this.payment.type;
-
-        if (this.payment.type == "cash") {
-            currentPayment[0][4] = 0;
-        } else {
-            currentPayment[0][4] = tipChange;
-        }
         return currentPayment;
     }
 
@@ -272,9 +264,7 @@ class Ui {
 
     static paymentSummary(orderInstance) {
         document.getElementById('amount-paid').textContent = Utilities.convertFloatToString(orderInstance.payment.amountPaid);
-
-        const changeTipTitle = document.getElementById('tip-change-title');
-        document.getElementById("tip-change-value").textContent = Utilities.convertFloatToString(orderInstance.payment.changeTip);
+        document.getElementById("change-value").textContent = Utilities.convertFloatToString(orderInstance.payment.change);
     }
 
 
@@ -343,6 +333,10 @@ class Utilities {
 }
 
 
+
+
+
+
 //-----------------------------------------------ORDER INSTANTIATION
 const order = new Order();
 
@@ -361,6 +355,7 @@ function sheetData() {
 }
 
 //sheetData();
+
 
 function sheetMockData() {
 
