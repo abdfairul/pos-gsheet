@@ -25,8 +25,7 @@ class Order {
             currItem.sku = menuItem[0];
             currItem.description = menuItem[1];
             currItem.price = menuItem[2];
-            currItem.taxRate = menuItem[3];
-            currItem.image = menuItem[4];
+            currItem.image = menuItem[3];
             this._menu.push(currItem);
         })
     }
@@ -84,7 +83,6 @@ class Order {
         currentLine.quantity = quantity;
         currentLine.price = Utilities.roundToTwo(parseFloat(lineData.price));
         currentLine.subtotal = currentLine.quantity * currentLine.price;
-        currentLine.tax = Utilities.roundToTwo(lineData.taxRate * currentLine.subtotal);
 
         this.order.push(currentLine);
         Ui.receiptDetails(this);
@@ -102,17 +100,13 @@ class Order {
     }
     getSummary() {
         const summary = {
-            subtotal: 0,
-            tax: 0,
             grandtotal: 0
         }
 
         this.order.forEach(orderLine => {
-            summary.subtotal += orderLine.subtotal;
-            summary.tax += orderLine.tax;
+            summary.grandtotal += orderLine.subtotal;
         })
 
-        summary.grandtotal = summary.subtotal + summary.tax;
 
         return summary;
     }
@@ -152,7 +146,6 @@ class Order {
             currentLine[2] = orderLine.sku;
             currentLine[3] = orderLine.quantity;
             currentLine[4] = orderLine.price;
-            currentLine[5] = orderLine.tax;
 
             exportData.push(currentLine);
             this.previousSales.push(currentLine);
@@ -208,7 +201,7 @@ class Ui {
 
             let node = document.createElement("figure");
             node.className = "menu-item";
-            let dataString = JSON.stringify({ sku: `${item.sku}`, description: `${item.description}`, price: `${item.price}`, taxRate: `${item.taxRate}` })
+            let dataString = JSON.stringify({ sku: `${item.sku}`, description: `${item.description}`, price: `${item.price}` })
             node.setAttribute("data-sku", dataString);
             node.innerHTML = menuElement;
             frag.appendChild(node);
@@ -228,9 +221,7 @@ class Ui {
 
         orderInstance.order.forEach((orderLine, index) => {
             let receiptLine = `<td class="description">${orderLine.description}</td>
-            <td class="quantity">${orderLine.quantity}</td>
-            <td class="price">${Utilities.convertFloatToString(orderLine.price)}</td>
-            <td class="subtotal">${Utilities.convertFloatToString(orderLine.subtotal)}</td>
+            <td class="price">${Utilities.convertFloatToString(orderLine.subtotal)}</td>
             <td class="delete" data-delete="${index.toString()}"><i class="fas fa-backspace"></i></td>`
 
             let node = document.createElement("tr");
@@ -261,18 +252,16 @@ class Ui {
     }
     static summary(orderInstance) {
         const summary = orderInstance.getSummary();
-        const subtotal = document.getElementById("subtotal-summary");
-        const tax = document.getElementById("tax-summary");
         const grandtotal = document.getElementById("grandtotal-summary");
 
-        subtotal.textContent = Utilities.convertFloatToString(summary.subtotal);
-        tax.textContent = Utilities.convertFloatToString(summary.tax);
         grandtotal.textContent = Utilities.convertFloatToString(summary.grandtotal);
     }
 
     static showPaypad(orderInstance) {
-        const paypad = document.getElementById('payment-overlay');
-        paypad.style.display = "grid"
+        if (orderInstance.getSummary().grandtotal > 0) {
+           const paypad = document.getElementById('payment-overlay');
+            paypad.style.display = "grid" 
+        }
     }
 
     static hidePaypad(orderInstance) {
@@ -285,19 +274,6 @@ class Ui {
         document.getElementById('amount-paid').textContent = Utilities.convertFloatToString(orderInstance.payment.amountPaid);
 
         const changeTipTitle = document.getElementById('tip-change-title');
-        const paymentType = document.getElementById('payment-type');
-
-        if (orderInstance.payment.type === 'credit') {
-            changeTipTitle.textContent = "Tip:";
-            paymentType.textContent = "CC";
-        } else if (orderInstance.payment.type === 'cash') {
-            changeTipTitle.textContent = "Change:";
-            paymentType.textContent = "Cash";
-        } else {
-            changeTipTitle.textContent = "Change:";
-            paymentType.textContent = "";
-        }
-
         document.getElementById("tip-change-value").textContent = Utilities.convertFloatToString(orderInstance.payment.changeTip);
     }
 
@@ -307,7 +283,7 @@ class Ui {
         if (bool) {
             closeButton.style.display = "none";
         } else {
-            closeButton.style.display = "grid";
+            closeButton.style.display = "block";
         }
     }
 }
@@ -367,10 +343,6 @@ class Utilities {
 }
 
 
-
-
-
-
 //-----------------------------------------------ORDER INSTANTIATION
 const order = new Order();
 
@@ -389,7 +361,6 @@ function sheetData() {
 }
 
 //sheetData();
-
 
 function sheetMockData() {
 
@@ -430,10 +401,10 @@ document.querySelectorAll('.paypad-btn').forEach(button => {
 
 
 const mockMenuData = [
-    [101, 'Burger', 10.99, 0.00, 'https://i.imgur.com/Zk4qRCK.png'],
-    [102, 'Fries', 6.99, 0.00, 'https://i.imgur.com/vARmiFx.png'],
-    [104, 'Pizza', 24.75, 0.00, 'https://i.imgur.com/PNqblrH.png'],
-    [105, 'Cake', 7.0, 0.00, 'https://i.imgur.com/lNzJTNr.png'],
+    [101, 'Burger', 10.99, 'https://i.imgur.com/Zk4qRCK.png'],
+    [102, 'Fries', 6.99, 'https://i.imgur.com/vARmiFx.png'],
+    [104, 'Pizza', 24.75, 'https://i.imgur.com/PNqblrH.png'],
+    [105, 'Cake', 7.0, 'https://i.imgur.com/lNzJTNr.png'],
 ];
 
 const mockPreviousSalesData = [

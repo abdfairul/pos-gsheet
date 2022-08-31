@@ -20,11 +20,11 @@
         <section class="order flex-column">
             <article class="receipt flex-column">
                 <div class="company-info flex-column">
-                    <p id="company-name">The Awesome Cafe</p>
-                    <p id="company-address">123 Elm St.</p>
-                    <p id="company-city">New York, NY</p>
-                    <p id="company-phone">888-888-8888</p>
-                    <p id="invoice-number"></p>
+                    <div id="company-name">PERPUSTAKAAN</div>
+                    <div id="company-address">SMK TAMAN PUTRI</div>
+                    <div id="company-city">Kulai, Johor</div>
+                    <div id="company-phone">888-888-8888</div>
+                    <div id="invoice-number"></div>
                 </div>
                 <div class="receipt-details">
                     <table class="details-detail">
@@ -36,11 +36,9 @@
                                 <td class="empty-border" colspan="5"></td>
                             </tr>
                             <tr>
-                                <th class="description">Description</th>
-                                <th class="quantity">Qty</th>
-                                <th class="price">Price</th>
-                                <th class="subtotal">Sub</th>
-                                <th class="delete">Del</th>
+                                <th class="description">Item</th>
+                                <th class="price">RM</th>
+                                <th class="delete"><i class="fa fa-trash" aria-hidden="true"></i></th>
                             </tr>
                             <tr>
                                 <td class="dotted-border" colspan="5"></td>
@@ -63,36 +61,29 @@
                             <tr>
                                 <td class="empty-border" colspan="3"></td>
                             </tr>
+
                             <tr>
-                                <td>Subtotal:</td>
-                                <td id="subtotal-summary">$0.00</td>
-                                <td></td>
+                                <!-- fake header to align column -->
+                                <th class="description"></th>
+                                <th class="price"></th>
+                                <th class="delete"></th>
                             </tr>
+
                             <tr>
-                                <td>Tax:</td>
-                                <td id="tax-summary">$0.00</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Grand Total:</td>
-                                <td id="grandtotal-summary">$0.00</td>
-                                <td></td>
+                                <td class="description">Jumlah:</td>
+                                <td class="price" id="grandtotal-summary">$0.00</td>
+                                <td class="delete" style="visibility: hidden;"><i class="fas fa-backspace"></i></td>
                             </tr>
                         </tbody>
                         <tbody class="summary-table" id="payment-summary">
                             <tr>
-                                <td>Amt Paid:</td>
-                                <td id="amount-paid">$0.00</td>
+                                <td class="description">Bayaran:</td>
+                                <td class="price" id="amount-paid">$0.00</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td id="tip-change-title">Change:</td>
-                                <td id="tip-change-value">$0.00</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Payment Type:</td>
-                                <td id="payment-type"></td>
+                                <td class="description" id="tip-change-title">Baki:</td>
+                                <td class="price" id="tip-change-value">$0.00</td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -104,14 +95,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="receipt-footer flex-column">
-                    <p id="receipt-message">Thanks For Your Business</p>
-                    <p id="barcode">Barcode</p>
-                </div>
             </article>
             <div class="toolbar flex-row">
                 <i class="fas fa-money-bill-wave toolbar-icon paypad-show" data-payment-type='{"type" : "cash"}'></i>
-                <i class="fas fa-credit-card toolbar-icon paypad-show" data-payment-type='{"type" : "credit"}'></i>
                 <i class="fas fa-trash-alt toolbar-icon" id="clear-order"></i>
             </div>
         </section>
@@ -133,7 +119,7 @@
                     <button class="paypad-btn number" data-id="0">0</button>
                     <button class="paypad-btn" data-id="back">Back</button>
                     <button class="paypad-btn" data-id="clear">Clear</button>
-                    <button class="paypad-btn span3-col" id="close-sale" data-id="close-sale">Close Sale</button>
+                    <button class="paypad-btn span3-col" id="close-sale" data-id="close-sale"><b>Close Sale</b></button>
                 </div>
                 <div class="close-paypad flex">
                     <i class="fas fa-times close-icon paypad-close" id="paypad-close"></i>
